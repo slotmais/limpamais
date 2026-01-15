@@ -36,8 +36,8 @@
       background-color: var(--bg-primary);
       color: var(--text-primary);
       line-height: 1.6;
-      padding-bottom: 80px; /* Espaço para o menu inferior fixo */
-      padding-top: 60px; /* Espaço para o cabeçalho fixo */
+      padding-bottom: 80px;
+      padding-top: 60px;
     }
 
     .container {
@@ -77,7 +77,7 @@
       color: var(--accent-blue);
       text-align: center;
       flex-grow: 1;
-      margin-left: -50px; /* Ajuste para centralizar */
+      margin-left: -50px;
     }
 
     .user-actions {
@@ -164,7 +164,7 @@
     /* Conteúdo das abas */
     .tab-content {
       display: none;
-      padding-bottom: 70px; /* Espaço para não sobrepor com o menu inferior */
+      padding-bottom: 70px;
     }
 
     .tab-content.active {
@@ -239,7 +239,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 550px; /* Força rolagem horizontal em telas pequenas */
+      min-width: 550px;
     }
 
     th, td {
@@ -413,7 +413,7 @@
     /* Botão flutuante */
     .floating-btn {
       position: fixed;
-      bottom: 95px; /* Acima do menu inferior fixo */
+      bottom: 95px;
       right: 15px;
       width: 45px;
       height: 45px;
@@ -500,6 +500,68 @@
       cursor: not-allowed;
     }
 
+    /* Tela de Login */
+    .login-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-primary);
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      background-color: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 25px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: var(--shadow);
+    }
+
+    .login-title {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--accent-blue);
+      font-size: 1.5rem;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .login-btn {
+      background-color: var(--accent-blue);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 15px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .register-link a {
+      color: var(--accent-blue);
+      text-decoration: none;
+    }
+
     /* Estilos específicos para mobile */
     @media (max-width: 480px) {
       .tabs {
@@ -552,11 +614,19 @@
         padding: 7px 5px;
         font-size: 0.75rem;
       }
+
+      .login-card {
+        padding: 20px;
+      }
+
+      .login-title {
+        font-size: 1.3rem;
+      }
     }
 
     /* Print styles */
     @media print {
-      .bottom-nav, .floating-btn, .btn, .action-cell, .tabs, .user-actions {
+      .bottom-nav, .floating-btn, .btn, .action-cell, .tabs, .user-actions, .login-screen {
         display: none;
       }
 
@@ -584,19 +654,40 @@
 </head>
 <body>
 
+  <!-- Tela de Login -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <h2 class="login-title">LIMPA MAIS</h2>
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" required placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Senha</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="login-btn">Entrar</button>
+      </form>
+      <div class="register-link">
+        <a href="#" id="showRegisterLink">Não tem conta? Registre-se</a>
+      </div>
+    </div>
+  </div>
+
   <!-- Header Fixo -->
-  <header>
+  <header id="appHeader" style="display: none;">
     <div class="logo">
       <span>🧼</span>
       LIMPA+
     </div>
     <h1>LIMPA MAIS</h1>
     <div class="user-actions">
-      <button class="btn btn-sm" id="printBtn">🖨️</button>
+      <button class="btn btn-sm" id="logoutBtn">Sair</button>
     </div>
   </header>
 
-  <div class="container main-content">
+  <div class="container main-content" id="appContent" style="display: none;">
     <!-- Abas -->
     <div class="tabs">
       <button class="tab-btn active" data-tab="dashboard">
@@ -605,7 +696,7 @@
       <button class="tab-btn" data-tab="inventory">
         <span>📦</span> Estoque
       </button>
-      <button class="tab-btn" data-tab="deliveries"> <!-- Alterado de "movements" para "deliveries" -->
+      <button class="tab-btn" data-tab="deliveries">
         <span>🚚</span> Entregas
       </button>
       <button class="tab-btn" data-tab="production">
@@ -638,7 +729,7 @@
       </div>
 
       <div class="card">
-        <h2 class="card-title">Últimas Entregas</h2> <!-- Alterado o título -->
+        <h2 class="card-title">Últimas Entregas</h2>
         <div class="table-container">
           <table>
             <thead>
@@ -649,7 +740,7 @@
                 <th>Qtde</th>
               </tr>
             </thead>
-            <tbody id="recent-deliveries-body"> <!-- Alterado o ID -->
+            <tbody id="recent-deliveries-body">
               <!-- Será preenchido dinamicamente -->
             </tbody>
           </table>
@@ -743,20 +834,20 @@
       </div>
     </section>
 
-    <!-- Entregas (Antigo "Movimentações") -->
-    <section id="deliveries" class="tab-content"> <!-- Alterado o ID -->
+    <!-- Entregas -->
+    <section id="deliveries" class="tab-content">
       <div class="card">
-        <h2 class="card-title">Registrar Entrega</h2> <!-- Alterado o título -->
-        <form id="delivery-form"> <!-- Alterado o ID -->
+        <h2 class="card-title">Registrar Entrega</h2>
+        <form id="delivery-form">
           <div class="form-group">
             <label for="deliveryProduct">Produto *</label>
-            <select id="deliveryProduct" required> <!-- Alterado o ID -->
+            <select id="deliveryProduct" required>
               <option value="">Selecione...</option>
             </select>
           </div>
           <div class="form-group">
             <label for="deliveryType">Tipo *</label>
-            <select id="deliveryType" required> <!-- Alterado o ID -->
+            <select id="deliveryType" required>
               <option value="">Selecione...</option>
               <option value="saida">Entrega/Saída</option>
               <option value="entrada">Recebimento/Entrada</option>
@@ -766,7 +857,7 @@
           </div>
           <div class="form-group">
             <label for="deliveryQty">Quantidade *</label>
-            <input type="number" id="deliveryQty" min="1" required> <!-- Alterado o ID -->
+            <input type="number" id="deliveryQty" min="1" required>
           </div>
           <div class="form-group">
             <label for="deliveryDesc">Descrição</label>
@@ -777,7 +868,7 @@
       </div>
 
       <div class="card">
-        <h2 class="card-title">Histórico de Entregas</h2> <!-- Alterado o título -->
+        <h2 class="card-title">Histórico de Entregas</h2>
         <div class="table-container">
           <table>
             <thead>
@@ -789,7 +880,7 @@
                 <th>Saldo</th>
               </tr>
             </thead>
-            <tbody id="deliveries-list"> <!-- Alterado o ID -->
+            <tbody id="deliveries-list">
               <!-- Será preenchido dinamicamente -->
             </tbody>
           </table>
@@ -887,10 +978,10 @@
   </div>
 
   <!-- Botão Flutuante (Mobile) -->
-  <button class="floating-btn" id="floatingAddBtn">+</button>
+  <button class="floating-btn" id="floatingAddBtn" style="display: none;">+</button>
 
   <!-- Menu Inferior Fixo -->
-  <nav class="bottom-nav">
+  <nav class="bottom-nav" id="bottomNav" style="display: none;">
     <a href="#" class="nav-item active" data-tab-mobile="dashboard">
       <div class="nav-icon">📊</div>
       <span>Início</span>
@@ -899,7 +990,7 @@
       <div class="nav-icon">📦</div>
       <span>Estoque</span>
     </a>
-    <a href="#" class="nav-item" data-tab-mobile="deliveries"> <!-- Alterado de "movements" para "deliveries" -->
+    <a href="#" class="nav-item" data-tab-mobile="deliveries">
       <div class="nav-icon">🚚</div>
       <span>Entregas</span>
     </a>
@@ -927,13 +1018,189 @@
   <script>
     // --- Variáveis Globais ---
     let currentTab = 'dashboard';
-    let products = JSON.parse(localStorage.getItem('limpamais_products')) || [
-      { id: 1, name: 'Desinfetante Neutro 1L', type: 'produto_acabado', capacity: '1L', unit: 'un', currentStock: 150, minStock: 20, createdAt: new Date().toISOString() },
-      { id: 2, name: 'Garrafa 1L', type: 'insumo', capacity: '1L', unit: 'un', currentStock: 300, minStock: 50, createdAt: new Date().toISOString() }
-    ];
-    let deliveries = JSON.parse(localStorage.getItem('limpamais_deliveries')) || []; // Alterado o nome da variável
-    let orders = JSON.parse(localStorage.getItem('limpamais_orders')) || [];
-    let sales = JSON.parse(localStorage.getItem('limpamais_sales')) || [];
+    let currentUser = null;
+    let db = null; // IndexedDB
+
+    // --- Inicialização do Banco de Dados (IndexedDB) ---
+    function initDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open('LIMPA_MAIS_DB', 1);
+
+        request.onerror = () => {
+          console.error('Erro ao abrir o banco de dados:', request.error);
+          reject(request.error);
+        };
+
+        request.onsuccess = () => {
+          db = request.result;
+          resolve(db);
+        };
+
+        request.onupgradeneeded = (event) => {
+          db = event.target.result;
+
+          // Criar object stores se não existirem
+          if (!db.objectStoreNames.contains('users')) {
+            const usersStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+            usersStore.createIndex('email', 'email', { unique: true });
+          }
+
+          if (!db.objectStoreNames.contains('products')) {
+            db.createObjectStore('products', { keyPath: 'id', autoIncrement: true });
+          }
+
+          if (!db.objectStoreNames.contains('deliveries')) {
+            db.createObjectStore('deliveries', { keyPath: 'id', autoIncrement: true });
+          }
+
+          if (!db.objectStoreNames.contains('orders')) {
+            db.createObjectStore('orders', { keyPath: 'id', autoIncrement: true });
+          }
+
+          if (!db.objectStoreNames.contains('sales')) {
+            db.createObjectStore('sales', { keyPath: 'id', autoIncrement: true });
+          }
+        };
+      });
+    }
+
+    // --- Funções de Autenticação ---
+    async function registerUser(email, password) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['users'], 'readwrite');
+        const store = transaction.objectStore('users');
+        const hashedPassword = btoa(password); // Simples hash base64 (não recomendado para produção real)
+
+        const checkRequest = store.index('email').get(email);
+        checkRequest.onsuccess = () => {
+          if (checkRequest.result) {
+            reject('Email já cadastrado');
+          } else {
+            const addRequest = store.add({
+              email: email,
+              password: hashedPassword,
+              createdAt: new Date().toISOString()
+            });
+            addRequest.onsuccess = () => resolve(addRequest.result);
+            addRequest.onerror = () => reject(addRequest.error);
+          }
+        };
+        checkRequest.onerror = () => reject(checkRequest.error);
+      });
+    }
+
+    async function loginUser(email, password) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['users'], 'readonly');
+        const store = transaction.objectStore('users');
+        const index = store.index('email');
+        const request = index.get(email);
+
+        request.onsuccess = () => {
+          const user = request.result;
+          if (user && user.password === btoa(password)) {
+            resolve(user);
+          } else {
+            reject('Email ou senha incorretos');
+          }
+        };
+        request.onerror = () => reject('Erro ao verificar usuário');
+      });
+    }
+
+    // --- Funções CRUD para Produtos ---
+    async function getProducts() {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['products'], 'readonly');
+        const store = transaction.objectStore('products');
+        const request = store.getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveProduct(product) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['products'], 'readwrite');
+        const store = transaction.objectStore('products');
+        const request = product.id ? store.put(product) : store.add(product);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function deleteProduct(productId) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['products'], 'readwrite');
+        const store = transaction.objectStore('products');
+        const request = store.delete(productId);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    // --- Funções CRUD para Entregas ---
+    async function getDeliveries() {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['deliveries'], 'readonly');
+        const store = transaction.objectStore('deliveries');
+        const request = store.getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveDelivery(delivery) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['deliveries'], 'readwrite');
+        const store = transaction.objectStore('deliveries');
+        const request = delivery.id ? store.put(delivery) : store.add(delivery);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    // --- Funções CRUD para Ordens ---
+    async function getOrders() {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['orders'], 'readonly');
+        const store = transaction.objectStore('orders');
+        const request = store.getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveOrder(order) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['orders'], 'readwrite');
+        const store = transaction.objectStore('orders');
+        const request = order.id ? store.put(order) : store.add(order);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    // --- Funções CRUD para Vendas ---
+    async function getSales() {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['sales'], 'readonly');
+        const store = transaction.objectStore('sales');
+        const request = store.getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveSale(sale) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['sales'], 'readwrite');
+        const store = transaction.objectStore('sales');
+        const request = sale.id ? store.put(sale) : store.add(sale);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
 
     // --- Funções de Navegação ---
     function switchTab(tabName) {
@@ -949,9 +1216,9 @@
 
       if (tabName === 'dashboard') loadDashboardData();
       else if (tabName === 'inventory') loadProducts();
-      else if (tabName === 'deliveries') { // Alterado
-        loadDeliveryOptions(); // Alterado
-        loadDeliveries(); // Alterado
+      else if (tabName === 'deliveries') {
+        loadDeliveryOptions();
+        loadDeliveries();
       }
       else if (tabName === 'production') {
         loadOrderOptions();
@@ -987,7 +1254,7 @@
       }
     });
 
-    document.getElementById('product-form').addEventListener('submit', (e) => {
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('productName').value;
       const type = document.getElementById('productType').value;
@@ -997,7 +1264,6 @@
       const minStock = parseInt(document.getElementById('productMinStock').value) || 0;
 
       const newProduct = {
-        id: Date.now(),
         name,
         type,
         capacity,
@@ -1007,41 +1273,50 @@
         createdAt: new Date().toISOString()
       };
 
-      products.push(newProduct);
-      localStorage.setItem('limpamais_products', JSON.stringify(products));
-      document.getElementById('product-form').reset();
-      capacityField.style.display = 'none';
-      loadProducts();
-      showNotification('Produto salvo!');
+      try {
+        await saveProduct(newProduct);
+        document.getElementById('product-form').reset();
+        capacityField.style.display = 'none';
+        loadProducts();
+        showNotification('Produto salvo!');
+      } catch (error) {
+        showNotification('Erro ao salvar produto: ' + error.message, 'error');
+      }
     });
 
-    function loadProducts() {
-      const filterType = document.getElementById('filterType').value;
-      let filteredProducts = [...products];
-      if (filterType) filteredProducts = filteredProducts.filter(p => p.type === filterType);
+    async function loadProducts() {
+      try {
+        const products = await getProducts();
+        const filterType = document.getElementById('filterType').value;
+        let filteredProducts = [...products];
+        if (filterType) filteredProducts = filteredProducts.filter(p => p.type === filterType);
 
-      const tbody = document.getElementById('products-list');
-      tbody.innerHTML = '';
+        const tbody = document.getElementById('products-list');
+        tbody.innerHTML = '';
 
-      filteredProducts.forEach(product => {
-        const isLowStock = product.currentStock <= product.minStock;
-        const statusClass = isLowStock ? 'status-pending' : 'status-active';
-        const statusText = isLowStock ? 'Baixo' : 'OK';
+        filteredProducts.forEach(product => {
+          const isLowStock = product.currentStock <= product.minStock;
+          const statusClass = isLowStock ? 'status-pending' : 'status-active';
+          const statusText = isLowStock ? 'Baixo' : 'OK';
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${product.name}</td>
-          <td>${getTypeLabel(product.type).substring(0, 3)}</td>
-          <td>${product.capacity || '-'}</td>
-          <td>${product.currentStock}</td>
-          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-          <td class="action-cell">
-            <button class="btn btn-sm btn-warning" onclick="editProduct(${product.id})">E</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">X</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${product.name}</td>
+            <td>${getTypeLabel(product.type).substring(0, 3)}</td>
+            <td>${product.capacity || '-'}</td>
+            <td>${product.currentStock}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td class="action-cell">
+              <button class="btn btn-sm btn-warning" onclick="editProduct(${product.id})">E</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.id})">X</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+        showNotification('Erro ao carregar produtos.', 'error');
+      }
     }
 
     function getTypeLabel(type) {
@@ -1052,105 +1327,130 @@
       }[type] || type;
     }
 
-    function editProduct(id) {
-      const product = products.find(p => p.id === id);
-      if (!product) return;
+    async function editProduct(id) {
+      try {
+        const products = await getProducts();
+        const product = products.find(p => p.id === id);
+        if (!product) return;
 
-      document.getElementById('productName').value = product.name;
-      document.getElementById('productType').value = product.type;
-      document.getElementById('productCapacity').value = product.capacity || '';
-      document.getElementById('productUnit').value = product.unit;
-      document.getElementById('productCurrentStock').value = product.currentStock;
-      document.getElementById('productMinStock').value = product.minStock;
+        document.getElementById('productName').value = product.name;
+        document.getElementById('productType').value = product.type;
+        document.getElementById('productCapacity').value = product.capacity || '';
+        document.getElementById('productUnit').value = product.unit;
+        document.getElementById('productCurrentStock').value = product.currentStock;
+        document.getElementById('productMinStock').value = product.minStock;
 
-      if (product.type === 'produto_acabado') capacityField.style.display = 'block';
-      else capacityField.style.display = 'none';
+        if (product.type === 'produto_acabado') capacityField.style.display = 'block';
+        else capacityField.style.display = 'none';
 
-      products = products.filter(p => p.id !== id);
-      localStorage.setItem('limpamais_products', JSON.stringify(products));
-      loadProducts();
-    }
-
-    function deleteProduct(id) {
-      if (confirm('Excluir produto?')) {
-        products = products.filter(p => p.id !== id);
-        localStorage.setItem('limpamais_products', JSON.stringify(products));
+        await deleteProduct(id);
         loadProducts();
-        showNotification('Produto excluído.');
+      } catch (error) {
+        console.error('Erro ao editar produto:', error);
+        showNotification('Erro ao editar produto.', 'error');
       }
     }
 
-    // --- Entregas (Antigo "Movimentações") ---
-    function loadDeliveryOptions() { // Alterado o nome da função
-      const select = document.getElementById('deliveryProduct'); // Alterado o ID
-      select.innerHTML = '<option value="">Selecione...</option>';
-      products.forEach(p => {
-        const option = document.createElement('option');
-        option.value = p.id;
-        option.textContent = `${p.name} (${p.capacity || p.unit})`;
-        select.appendChild(option);
-      });
+    async function deleteProduct(id) {
+      if (confirm('Excluir produto?')) {
+        try {
+          await deleteProduct(id);
+          loadProducts();
+          showNotification('Produto excluído.');
+        } catch (error) {
+          console.error('Erro ao excluir produto:', error);
+          showNotification('Erro ao excluir produto.', 'error');
+        }
+      }
     }
 
-    document.getElementById('delivery-form').addEventListener('submit', (e) => { // Alterado o ID
+    // --- Entregas ---
+    async function loadDeliveryOptions() {
+      try {
+        const products = await getProducts();
+        const select = document.getElementById('deliveryProduct');
+        select.innerHTML = '<option value="">Selecione...</option>';
+        products.forEach(p => {
+          const option = document.createElement('option');
+          option.value = p.id;
+          option.textContent = `${p.name} (${p.capacity || p.unit})`;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar opções de entrega:', error);
+      }
+    }
+
+    document.getElementById('delivery-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const productId = parseInt(document.getElementById('deliveryProduct').value); // Alterado o ID
-      const type = document.getElementById('deliveryType').value; // Alterado o ID
-      const qty = parseInt(document.getElementById('deliveryQty').value); // Alterado o ID
-      const desc = document.getElementById('deliveryDesc').value; // Alterado o ID
+      const productId = parseInt(document.getElementById('deliveryProduct').value);
+      const type = document.getElementById('deliveryType').value;
+      const qty = parseInt(document.getElementById('deliveryQty').value);
+      const desc = document.getElementById('deliveryDesc').value;
 
       if (isNaN(qty) || qty <= 0) {
         showNotification('Quantidade inválida.', 'error');
         return;
       }
 
-      const product = products.find(p => p.id === productId);
-      if (!product) return;
+      try {
+        const products = await getProducts();
+        const productIndex = products.findIndex(p => p.id === productId);
+        if (productIndex === -1) throw new Error('Produto não encontrado');
 
-      const previousStock = product.currentStock;
-      let currentStock = previousStock;
-      if (['entrada', 'producao_entrada'].includes(type)) currentStock += qty;
-      else if (['saida', 'producao_saida'].includes(type)) currentStock -= qty;
+        const previousStock = products[productIndex].currentStock;
+        let currentStock = previousStock;
+        if (['entrada', 'producao_entrada'].includes(type)) currentStock += qty;
+        else if (['saida', 'producao_saida'].includes(type)) currentStock -= qty;
 
-      product.currentStock = currentStock;
-      localStorage.setItem('limpamais_products', JSON.stringify(products));
+        products[productIndex].currentStock = currentStock;
+        await saveProduct(products[productIndex]);
 
-      const delivery = { // Alterado o nome da variável
-        id: Date.now(),
-        productId, type, quantity: qty, description: desc,
-        date: new Date().toISOString(),
-        previousStock, currentStock
-      };
+        const delivery = {
+          productId, type, quantity: qty, description: desc,
+          date: new Date().toISOString(),
+          previousStock, currentStock
+        };
 
-      deliveries.push(delivery); // Alterado
-      localStorage.setItem('limpamais_deliveries', JSON.stringify(deliveries)); // Alterado
-      document.getElementById('delivery-form').reset(); // Alterado
-      loadDeliveries(); // Alterado
-      loadProducts();
-      showNotification('Entrega registrada.');
+        await saveDelivery(delivery);
+        document.getElementById('delivery-form').reset();
+        loadDeliveries();
+        loadProducts();
+        showNotification('Entrega registrada.');
+      } catch (error) {
+        console.error('Erro ao registrar entrega:', error);
+        showNotification('Erro: ' + error.message, 'error');
+      }
     });
 
-    function loadDeliveries() { // Alterado o nome da função
-      const tbody = document.getElementById('deliveries-list'); // Alterado o ID
-      tbody.innerHTML = '';
+    async function loadDeliveries() {
+      try {
+        const deliveries = await getDeliveries();
+        const products = await getProducts();
+        const tbody = document.getElementById('deliveries-list');
+        tbody.innerHTML = '';
 
-      [...deliveries].reverse().slice(0, 10).forEach(d => { // Alterado
-        const product = products.find(p => p.id === d.productId);
-        const productName = product ? product.name.split(' ')[0] : 'N/A'; // Abreviar nome
+        [...deliveries].reverse().slice(0, 10).forEach(d => {
+          const product = products.find(p => p.id === d.productId);
+          const productName = product ? product.name.split(' ')[0] : 'N/A';
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${new Date(d.date).toLocaleDateString()}</td>
-          <td>${productName}</td>
-          <td><span class="movement-badge ${getDeliveryBadgeClass(d.type)}">${getTypeLabelDelivery(d.type).substring(0, 3)}</span></td> <!-- Alterado -->
-          <td>${d.quantity}</td>
-          <td>${d.currentStock}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${new Date(d.date).toLocaleDateString()}</td>
+            <td>${productName}</td>
+            <td><span class="movement-badge ${getDeliveryBadgeClass(d.type)}">${getTypeLabelDelivery(d.type).substring(0, 3)}</span></td>
+            <td>${d.quantity}</td>
+            <td>${d.currentStock}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar entregas:', error);
+        showNotification('Erro ao carregar entregas.', 'error');
+      }
     }
 
-    function getTypeLabelDelivery(type) { // Alterado o nome da função
+    function getTypeLabelDelivery(type) {
       return {
         'saida': 'Saída',
         'entrada': 'Entrada',
@@ -1159,74 +1459,95 @@
       }[type] || type;
     }
 
-    function getDeliveryBadgeClass(type) { // Alterado o nome da função
+    function getDeliveryBadgeClass(type) {
       if (type.includes('entrada')) return 'badge-in';
-      if (type.includes('saida')) return 'badge-out'; // "saida" agora significa "Entrega"
+      if (type.includes('saida')) return 'badge-out';
       return 'badge-in';
     }
 
-
     // --- Produção ---
-    function loadOrderOptions() {
-      const select = document.getElementById('orderProduct');
-      select.innerHTML = '<option value="">Selecione...</option>';
-      products.filter(p => p.type === 'produto_acabado').forEach(p => {
-        const option = document.createElement('option');
-        option.value = p.id;
-        option.textContent = `${p.name} (${p.capacity})`;
-        select.appendChild(option);
-      });
+    async function loadOrderOptions() {
+      try {
+        const products = await getProducts();
+        const select = document.getElementById('orderProduct');
+        select.innerHTML = '<option value="">Selecione...</option>';
+        products.filter(p => p.type === 'produto_acabado').forEach(p => {
+          const option = document.createElement('option');
+          option.value = p.id;
+          option.textContent = `${p.name} (${p.capacity})`;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar opções de produção:', error);
+      }
     }
 
-    document.getElementById('production-order-form').addEventListener('submit', (e) => {
+    document.getElementById('production-order-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const productId = parseInt(document.getElementById('orderProduct').value);
       const quantity = parseInt(document.getElementById('orderQuantity').value);
       const dueDate = document.getElementById('orderDate').value || new Date(Date.now() + 7*24*60*60*1000).toISOString().split('T')[0];
 
       const order = {
-        id: Date.now(),
         productId, quantity, produced: 0, status: 'pendente',
         dueDate: new Date(dueDate).toISOString(),
         createdAt: new Date().toISOString()
       };
 
-      orders.push(order);
-      localStorage.setItem('limpamais_orders', JSON.stringify(orders));
-      document.getElementById('production-order-form').reset();
-      loadOrders();
-      showNotification('Ordem criada.');
+      try {
+        await saveOrder(order);
+        document.getElementById('production-order-form').reset();
+        loadOrders();
+        showNotification('Ordem criada.');
+      } catch (error) {
+        console.error('Erro ao criar ordem:', error);
+        showNotification('Erro ao criar ordem: ' + error.message, 'error');
+      }
     });
 
-    function loadOrders() {
-      const tbody = document.getElementById('orders-list');
-      tbody.innerHTML = '';
+    async function loadOrders() {
+      try {
+        const orders = await getOrders();
+        const products = await getProducts();
+        const tbody = document.getElementById('orders-list');
+        tbody.innerHTML = '';
 
-      orders.forEach(order => {
-        const product = products.find(p => p.id === order.productId);
-        const productName = product ? product.name.split(' ')[0] : 'N/A';
+        orders.forEach(order => {
+          const product = products.find(p => p.id === order.productId);
+          const productName = product ? product.name.split(' ')[0] : 'N/A';
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${productName}</td>
-          <td>${order.quantity}</td>
-          <td><span class="status-badge ${getStatusClass(order.status)}">${order.status.substring(0, 3)}</span></td>
-          <td>${new Date(order.dueDate).toLocaleDateString()}</td>
-          <td class="action-cell">
-            <button class="btn btn-sm btn-warning" onclick="updateOrderStatus(${order.id})">✓</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${productName}</td>
+            <td>${order.quantity}</td>
+            <td><span class="status-badge ${getStatusClass(order.status)}">${order.status.substring(0, 3)}</span></td>
+            <td>${new Date(order.dueDate).toLocaleDateString()}</td>
+            <td class="action-cell">
+              <button class="btn btn-sm btn-warning" onclick="updateOrderStatus(${order.id})">✓</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar ordens:', error);
+        showNotification('Erro ao carregar ordens.', 'error');
+      }
     }
 
-    function updateOrderStatus(orderId) {
-      const order = orders.find(o => o.id === orderId);
-      if (!order) return;
-      order.status = order.status === 'pendente' ? 'em_producao' : 'concluida';
-      localStorage.setItem('limpamais_orders', JSON.stringify(orders));
-      loadOrders();
-      showNotification('Status atualizado.');
+    async function updateOrderStatus(orderId) {
+      try {
+        const orders = await getOrders();
+        const order = orders.find(o => o.id === orderId);
+        if (!order) return;
+
+        order.status = order.status === 'pendente' ? 'em_producao' : 'concluida';
+        await saveOrder(order);
+        loadOrders();
+        showNotification('Status atualizado.');
+      } catch (error) {
+        console.error('Erro ao atualizar status:', error);
+        showNotification('Erro ao atualizar status.', 'error');
+      }
     }
 
     function getStatusClass(status) {
@@ -1234,109 +1555,132 @@
     }
 
     // --- Vendas ---
-    function loadSaleOptions() {
-      const select = document.getElementById('saleProduct');
-      select.innerHTML = '<option value="">Selecione...</option>';
-      products.filter(p => p.type === 'produto_acabado').forEach(p => {
-        const option = document.createElement('option');
-        option.value = p.id;
-        option.textContent = `${p.name} (${p.capacity})`;
-        select.appendChild(option);
-      });
+    async function loadSaleOptions() {
+      try {
+        const products = await getProducts();
+        const select = document.getElementById('saleProduct');
+        select.innerHTML = '<option value="">Selecione...</option>';
+        products.filter(p => p.type === 'produto_acabado').forEach(p => {
+          const option = document.createElement('option');
+          option.value = p.id;
+          option.textContent = `${p.name} (${p.capacity})`;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar opções de venda:', error);
+      }
     }
 
-    document.getElementById('sale-form').addEventListener('submit', (e) => {
+    document.getElementById('sale-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const productId = parseInt(document.getElementById('saleProduct').value);
       const quantity = parseInt(document.getElementById('saleQuantity').value);
       const customer = document.getElementById('saleCustomer').value || 'Cliente';
 
-      const product = products.find(p => p.id === productId);
-      if (!product) return;
-      if (product.currentStock < quantity) {
-        showNotification('Estoque insuficiente!', 'error');
-        return;
+      try {
+        const products = await getProducts();
+        const productIndex = products.findIndex(p => p.id === productId);
+        if (productIndex === -1) throw new Error('Produto não encontrado');
+        if (products[productIndex].currentStock < quantity) throw new Error('Estoque insuficiente');
+
+        products[productIndex].currentStock -= quantity;
+        await saveProduct(products[productIndex]);
+
+        const sale = {
+          productId, quantity, customer,
+          date: new Date().toISOString(),
+          total: (quantity * (products[productIndex].price || 10)).toFixed(2)
+        };
+
+        await saveSale(sale);
+        document.getElementById('sale-form').reset();
+        loadSales();
+        loadProducts();
+        showNotification('Venda registrada.');
+      } catch (error) {
+        console.error('Erro ao registrar venda:', error);
+        showNotification('Erro: ' + error.message, 'error');
       }
-
-      product.currentStock -= quantity;
-      localStorage.setItem('limpamais_products', JSON.stringify(products));
-
-      const sale = {
-        id: Date.now(),
-        productId, quantity, customer,
-        date: new Date().toISOString(),
-        total: (quantity * (product.price || 10)).toFixed(2) // Valor simulado
-      };
-
-      sales.push(sale);
-      localStorage.setItem('limpamais_sales', JSON.stringify(sales));
-      document.getElementById('sale-form').reset();
-      loadSales();
-      loadProducts();
-      showNotification('Venda registrada.');
     });
 
-    function loadSales() {
-      const tbody = document.getElementById('sales-list');
-      tbody.innerHTML = '';
+    async function loadSales() {
+      try {
+        const sales = await getSales();
+        const products = await getProducts();
+        const tbody = document.getElementById('sales-list');
+        tbody.innerHTML = '';
 
-      [...sales].reverse().slice(0, 10).forEach(s => {
-        const product = products.find(p => p.id === s.productId);
-        const productName = product ? product.name.split(' ')[0] : 'N/A';
+        [...sales].reverse().slice(0, 10).forEach(s => {
+          const product = products.find(p => p.id === s.productId);
+          const productName = product ? product.name.split(' ')[0] : 'N/A';
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${productName}</td>
-          <td>${s.quantity}</td>
-          <td>${s.customer}</td>
-          <td>${new Date(s.date).toLocaleDateString()}</td>
-          <td>R$${s.total}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${productName}</td>
+            <td>${s.quantity}</td>
+            <td>${s.customer}</td>
+            <td>${new Date(s.date).toLocaleDateString()}</td>
+            <td>R$${s.total}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar vendas:', error);
+        showNotification('Erro ao carregar vendas.', 'error');
+      }
     }
 
     // --- Dashboard ---
-    function loadDashboardData() {
-      document.getElementById('total-products').textContent = products.length;
-      document.getElementById('low-stock-count').textContent = products.filter(p => p.currentStock <= p.minStock).length;
-      
-      const totalSalesValue = sales.reduce((sum, s) => sum + parseFloat(s.total), 0);
-      document.getElementById('total-sales').textContent = `R$${totalSalesValue.toFixed(0)}`;
-      
-      document.getElementById('active-orders').textContent = orders.filter(o => o.status !== 'concluida').length;
+    async function loadDashboardData() {
+      try {
+        const products = await getProducts();
+        const sales = await getSales();
+        const orders = await getOrders();
+        const deliveries = await getDeliveries();
 
-      // Atualizar últimas entregas (antigo "movimentações")
-      const recentBody = document.getElementById('recent-deliveries-body'); // Alterado o ID
-      recentBody.innerHTML = '';
-      [...deliveries].reverse().slice(0, 5).forEach(d => { // Alterado
-        const product = products.find(p => p.id === d.productId);
-        const productName = product ? product.name.split(' ')[0] : 'N/A';
-        const typeShort = getTypeLabelDelivery(d.type).substring(0, 3); // Alterado
+        document.getElementById('total-products').textContent = products.length;
+        document.getElementById('low-stock-count').textContent = products.filter(p => p.currentStock <= p.minStock).length;
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${new Date(d.date).toLocaleDateString()}</td>
-          <td>${productName}</td>
-          <td><span class="movement-badge ${getDeliveryBadgeClass(d.type)}">${typeShort}</span></td> <!-- Alterado -->
-          <td>${d.quantity}</td>
-        `;
-        recentBody.appendChild(row);
-      });
+        const totalSalesValue = sales.reduce((sum, s) => sum + parseFloat(s.total), 0);
+        document.getElementById('total-sales').textContent = `R$${totalSalesValue.toFixed(0)}`;
 
-      // Alertas
-      const lowStockAlerts = document.getElementById('low-stock-alerts');
-      lowStockAlerts.innerHTML = '';
-      const lowStockItems = products.filter(p => p.currentStock <= p.minStock);
-      if (lowStockItems.length === 0) {
-        lowStockAlerts.innerHTML = '<p>Tudo OK!</p>';
-      } else {
-        lowStockItems.forEach(item => {
-          const alert = document.createElement('div');
-          alert.className = 'alert-low-stock';
-          alert.innerHTML = `<span>⚠️</span> <div>${item.name}: ${item.currentStock}/${item.minStock}</div>`;
-          lowStockAlerts.appendChild(alert);
+        document.getElementById('active-orders').textContent = orders.filter(o => o.status !== 'concluida').length;
+
+        // Atualizar últimas entregas
+        const recentBody = document.getElementById('recent-deliveries-body');
+        recentBody.innerHTML = '';
+        [...deliveries].reverse().slice(0, 5).forEach(d => {
+          const product = products.find(p => p.id === d.productId);
+          const productName = product ? product.name.split(' ')[0] : 'N/A';
+          const typeShort = getTypeLabelDelivery(d.type).substring(0, 3);
+
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${new Date(d.date).toLocaleDateString()}</td>
+            <td>${productName}</td>
+            <td><span class="movement-badge ${getDeliveryBadgeClass(d.type)}">${typeShort}</span></td>
+            <td>${d.quantity}</td>
+          `;
+          recentBody.appendChild(row);
         });
+
+        // Alertas
+        const lowStockAlerts = document.getElementById('low-stock-alerts');
+        lowStockAlerts.innerHTML = '';
+        const lowStockItems = products.filter(p => p.currentStock <= p.minStock);
+        if (lowStockItems.length === 0) {
+          lowStockAlerts.innerHTML = '<p>Tudo OK!</p>';
+        } else {
+          lowStockItems.forEach(item => {
+            const alert = document.createElement('div');
+            alert.className = 'alert-low-stock';
+            alert.innerHTML = `<span>⚠️</span> <div>${item.name}: ${item.currentStock}/${item.minStock}</div>`;
+            lowStockAlerts.appendChild(alert);
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dashboard:', error);
+        showNotification('Erro ao carregar dashboard.', 'error');
       }
     }
 
@@ -1344,8 +1688,8 @@
     document.getElementById('floatingAddBtn').addEventListener('click', () => {
       if (currentTab === 'inventory') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else if (currentTab === 'deliveries') { // Alterado
-        switchTab('deliveries'); // Alterado
+      } else if (currentTab === 'deliveries') {
+        switchTab('deliveries');
       } else if (currentTab === 'production') {
         switchTab('production');
       } else if (currentTab === 'sales') {
@@ -1353,7 +1697,14 @@
       }
     });
 
-    document.getElementById('printBtn').addEventListener('click', () => window.print());
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('Deseja realmente sair?')) {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        showLoginScreen();
+      }
+    });
 
     // Fechar modal
     document.querySelector('.modal-close').addEventListener('click', () => {
@@ -1369,16 +1720,66 @@
     // Filtros
     document.getElementById('filterType').addEventListener('change', loadProducts);
 
+    // --- Sistema de Login ---
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const user = await loginUser(email, password);
+        currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        showApp();
+        loadDashboardData();
+      } catch (error) {
+        showNotification(error.message, 'error');
+      }
+    });
+
+    document.getElementById('showRegisterLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = prompt('Digite seu email:');
+      const password = prompt('Digite sua senha:');
+      if (email && password) {
+        registerUser(email, password)
+          .then(() => showNotification('Conta criada com sucesso!'))
+          .catch(err => showNotification('Erro: ' + err, 'error'));
+      }
+    });
+
+    function showLoginScreen() {
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('appHeader').style.display = 'none';
+      document.getElementById('appContent').style.display = 'none';
+      document.getElementById('floatingAddBtn').style.display = 'none';
+      document.getElementById('bottomNav').style.display = 'none';
+    }
+
+    function showApp() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('appHeader').style.display = 'flex';
+      document.getElementById('appContent').style.display = 'block';
+      document.getElementById('floatingAddBtn').style.display = 'block';
+      document.getElementById('bottomNav').style.display = 'flex';
+    }
+
     // --- Inicialização ---
-    document.addEventListener('DOMContentLoaded', () => {
-      loadDashboardData();
-      loadProducts();
-      loadDeliveryOptions(); // Alterado
-      loadOrderOptions();
-      loadSaleOptions();
-      loadDeliveries(); // Alterado
-      loadOrders();
-      loadSales();
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await initDB();
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+          currentUser = JSON.parse(savedUser);
+          showApp();
+          loadDashboardData();
+        } else {
+          showLoginScreen();
+        }
+      } catch (error) {
+        console.error('Erro ao inicializar o banco de dados:', error);
+        showNotification('Erro ao inicializar o sistema.', 'error');
+      }
     });
 
     // --- Funções Globais ---
@@ -1391,7 +1792,7 @@
       notification.textContent = message;
       notification.style.cssText = `
         position: fixed; top: 70px; left: 50%; transform: translateX(-50%); 
-        padding: 9px 18px; border-radius: 18px; background: #3b82f6; color: white; 
+        padding: 9px 18px; border-radius: 18px; background: ${type === 'error' ? '#dc2626' : '#3b82f6'}; color: white; 
         z-index: 1000; font-size: 0.85rem; text-align: center;
       `;
       document.body.appendChild(notification);
